@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-    <version>3.4</version>
-    <date>2017-10-23T10:03:20Z</date>
+    <version>4.4</version>
+    <date>2020-07-21T01:25:57Z</date>
     <groups>
         <group>
             <name>Templates/Applications</name>
@@ -11,7 +11,6 @@
         <template>
             <template>Template App Pacemaker</template>
             <name>Template App Pacemaker</name>
-            <description/>
             <groups>
                 <group>
                     <name>Templates/Applications</name>
@@ -28,315 +27,150 @@
             <items>
                 <item>
                     <name>pacemaker.cluster.dc</name>
-                    <type>18</type>
-                    <snmp_community/>
-                    <snmp_oid/>
+                    <type>DEPENDENT</type>
                     <key>pacemaker.cluster.dc</key>
                     <delay>0</delay>
                     <history>7d</history>
                     <trends>0</trends>
-                    <status>0</status>
-                    <value_type>4</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
+                    <value_type>TEXT</value_type>
                     <description>Current cluster DC (Designated Coordinator)</description>
-                    <inventory_link>0</inventory_link>
                     <applications>
                         <application>
                             <name>Pacemaker</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
                     <preprocessing>
                         <step>
-                            <type>11</type>
+                            <type>XMLPATH</type>
                             <params>string(/crm_mon/summary/current_dc/@name)</params>
                         </step>
                     </preprocessing>
-                    <jmx_endpoint/>
                     <master_item>
                         <key>pacemaker.status</key>
                     </master_item>
                 </item>
                 <item>
                     <name>pacemaker.cluster.failed_actions</name>
-                    <type>18</type>
-                    <snmp_community/>
-                    <snmp_oid/>
+                    <type>DEPENDENT</type>
                     <key>pacemaker.cluster.failed_actions</key>
                     <delay>0</delay>
                     <history>7d</history>
                     <trends>0</trends>
-                    <status>0</status>
-                    <value_type>4</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
+                    <value_type>TEXT</value_type>
                     <description>The current number of failed actions</description>
-                    <inventory_link>0</inventory_link>
                     <applications>
                         <application>
                             <name>Pacemaker</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
                     <preprocessing>
                         <step>
-                            <type>11</type>
+                            <type>XMLPATH</type>
                             <params>count(/crm_mon/failures)</params>
                         </step>
                     </preprocessing>
-                    <jmx_endpoint/>
                     <master_item>
                         <key>pacemaker.status</key>
                     </master_item>
                 </item>
                 <item>
                     <name>pacemaker.cluster.maintenance</name>
-                    <type>18</type>
-                    <snmp_community/>
-                    <snmp_oid/>
+                    <type>DEPENDENT</type>
                     <key>pacemaker.cluster.maintenance</key>
                     <delay>0</delay>
                     <history>7d</history>
                     <trends>0</trends>
-                    <status>0</status>
-                    <value_type>4</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
+                    <value_type>TEXT</value_type>
                     <description>Shows if the cluster is in the maintenance state</description>
-                    <inventory_link>0</inventory_link>
                     <applications>
                         <application>
                             <name>Pacemaker</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
                     <preprocessing>
                         <step>
-                            <type>11</type>
+                            <type>XMLPATH</type>
                             <params>string(/crm_mon/summary/cluster_options/@maintenance-mode)</params>
                         </step>
                     </preprocessing>
-                    <jmx_endpoint/>
                     <master_item>
                         <key>pacemaker.status</key>
                     </master_item>
+                    <triggers>
+                        <trigger>
+                            <expression>{str(true)}=1</expression>
+                            <name>{HOST.NAME}/pacemaker: Cluster maintenance</name>
+                            <priority>INFO</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
                 </item>
                 <item>
                     <name>pacemaker.nodes.offline</name>
-                    <type>18</type>
-                    <snmp_community/>
-                    <snmp_oid/>
+                    <type>DEPENDENT</type>
                     <key>pacemaker.nodes.offline</key>
                     <delay>0</delay>
                     <history>7d</history>
-                    <trends>365d</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
                     <units>node</units>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
                     <description>The current number of offline (or in the shutdown state) nodes</description>
-                    <inventory_link>0</inventory_link>
                     <applications>
                         <application>
                             <name>Pacemaker</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
                     <preprocessing>
                         <step>
-                            <type>11</type>
+                            <type>XMLPATH</type>
                             <params>count(/crm_mon/nodes/node[@online=&quot;false&quot; or @shutdown=&quot;true&quot;])</params>
                         </step>
                     </preprocessing>
-                    <jmx_endpoint/>
                     <master_item>
                         <key>pacemaker.status</key>
                     </master_item>
                 </item>
                 <item>
                     <name>pacemaker.resources.failed</name>
-                    <type>18</type>
-                    <snmp_community/>
-                    <snmp_oid/>
+                    <type>DEPENDENT</type>
                     <key>pacemaker.resources.failed</key>
                     <delay>0</delay>
                     <history>7d</history>
-                    <trends>365d</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
                     <units>res</units>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
                     <description>The current number of failed (non active or blocked) resources</description>
-                    <inventory_link>0</inventory_link>
                     <applications>
                         <application>
                             <name>Pacemaker</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
                     <preprocessing>
                         <step>
-                            <type>11</type>
+                            <type>XMLPATH</type>
                             <params>count(/crm_mon/resources/group/resource[@active=&quot;false&quot; or @failed=&quot;true&quot; or @blocked=&quot;true&quot;])</params>
                         </step>
                     </preprocessing>
-                    <jmx_endpoint/>
                     <master_item>
                         <key>pacemaker.status</key>
                     </master_item>
                 </item>
                 <item>
                     <name>pacemaker.status</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <snmp_oid/>
                     <key>pacemaker.status</key>
-                    <delay>5s</delay>
+                    <delay>30</delay>
                     <history>0</history>
                     <trends>0</trends>
-                    <status>0</status>
-                    <value_type>4</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
+                    <value_type>TEXT</value_type>
                     <description>Service item for data gathering</description>
-                    <inventory_link>0</inventory_link>
                     <applications>
                         <application>
                             <name>Internal items</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
-                    <preprocessing/>
-                    <jmx_endpoint/>
-                    <master_item/>
                 </item>
                 <item>
                     <name>pacemaker.process.corosync.active</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <snmp_oid/>
                     <key>proc.num[corosync]</key>
-                    <delay>5s</delay>
+                    <delay>30</delay>
                     <history>7d</history>
-                    <trends>365d</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
                     <description>Shows if corosync daemon is in the running state</description>
-                    <inventory_link>0</inventory_link>
                     <applications>
                         <application>
                             <name>Pacemaker</name>
@@ -345,41 +179,21 @@
                     <valuemap>
                         <name>Service state</name>
                     </valuemap>
-                    <logtimefmt/>
-                    <preprocessing/>
-                    <jmx_endpoint/>
-                    <master_item/>
+                    <triggers>
+                        <trigger>
+                            <expression>{max(30)}=0</expression>
+                            <name>{HOST.NAME}/pacemaker: corosync daemon isn't running</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
                 </item>
                 <item>
                     <name>pacemaker.process.pacemakerd.active</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <snmp_oid/>
                     <key>proc.num[pacemakerd]</key>
-                    <delay>5s</delay>
+                    <delay>30</delay>
                     <history>7d</history>
-                    <trends>365d</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
                     <description>Shows if pacemakerd daemon is in the running state</description>
-                    <inventory_link>0</inventory_link>
                     <applications>
                         <application>
                             <name>Pacemaker</name>
@@ -388,184 +202,75 @@
                     <valuemap>
                         <name>Service state</name>
                     </valuemap>
-                    <logtimefmt/>
-                    <preprocessing/>
-                    <jmx_endpoint/>
-                    <master_item/>
-                </item>
-                <item>
-                    <name>system.hostname</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <snmp_oid/>
-                    <key>system.hostname</key>
-                    <delay>5s</delay>
-                    <history>7d</history>
-                    <trends>0</trends>
-                    <status>0</status>
-                    <value_type>4</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description>Node hostname. If it changes, it could mean that the VIP has been moved to another node</description>
-                    <inventory_link>0</inventory_link>
-                    <applications/>
-                    <valuemap/>
-                    <logtimefmt/>
-                    <preprocessing/>
-                    <jmx_endpoint/>
-                    <master_item/>
+                    <triggers>
+                        <trigger>
+                            <expression>{max(30)}=0</expression>
+                            <name>{HOST.NAME}/pacemaker: pacemakerd daemon isn't running</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
                 </item>
             </items>
-            <discovery_rules/>
-            <httptests/>
-            <macros/>
-            <templates/>
-            <screens/>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Pacemaker Resource LLD</name>
+                    <type>TRAP</type>
+                    <key>resourcename[{#RESOURCE}]</key>
+                    <delay>0</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Resource Location</name>
+                            <type>TRAP</type>
+                            <key>resourcelocation[{#RESOURCE}]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Pacemaker</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{change()}=1</expression>
+                                    <recovery_mode>NONE</recovery_mode>
+                                    <name>Resource move</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
         </template>
     </templates>
     <triggers>
         <trigger>
-            <expression>{Template App Pacemaker:pacemaker.cluster.maintenance.str(true)}=1</expression>
-            <recovery_mode>0</recovery_mode>
-            <recovery_expression/>
-            <name>{HOST.NAME}/pacemaker: Cluster maintenance</name>
-            <correlation_mode>0</correlation_mode>
-            <correlation_tag/>
-            <url/>
-            <status>0</status>
-            <priority>1</priority>
-            <description/>
-            <type>0</type>
-            <manual_close>1</manual_close>
-            <dependencies/>
-            <tags/>
-        </trigger>
-        <trigger>
-            <expression>{Template App Pacemaker:proc.num[corosync].max(30)}=0</expression>
-            <recovery_mode>0</recovery_mode>
-            <recovery_expression/>
-            <name>{HOST.NAME}/pacemaker: corosync daemon isn't running</name>
-            <correlation_mode>0</correlation_mode>
-            <correlation_tag/>
-            <url/>
-            <status>0</status>
-            <priority>4</priority>
-            <description/>
-            <type>0</type>
-            <manual_close>1</manual_close>
-            <dependencies/>
-            <tags/>
-        </trigger>
-        <trigger>
             <expression>{Template App Pacemaker:pacemaker.cluster.dc.diff(0)}=1 and {Template App Pacemaker:pacemaker.cluster.maintenance.str(true)}=0</expression>
-            <recovery_mode>2</recovery_mode>
-            <recovery_expression/>
+            <recovery_mode>NONE</recovery_mode>
             <name>{HOST.NAME}/pacemaker: DC was changed</name>
-            <correlation_mode>0</correlation_mode>
-            <correlation_tag/>
-            <url/>
-            <status>0</status>
-            <priority>2</priority>
-            <description/>
-            <type>0</type>
-            <manual_close>1</manual_close>
-            <dependencies/>
-            <tags/>
+            <priority>WARNING</priority>
+            <manual_close>YES</manual_close>
         </trigger>
         <trigger>
             <expression>{Template App Pacemaker:pacemaker.cluster.failed_actions.last()}&gt;0 and {Template App Pacemaker:pacemaker.cluster.maintenance.str(true)}=0</expression>
-            <recovery_mode>0</recovery_mode>
-            <recovery_expression/>
             <name>{HOST.NAME}/pacemaker: Failed actions found</name>
-            <correlation_mode>0</correlation_mode>
-            <correlation_tag/>
-            <url/>
-            <status>0</status>
-            <priority>3</priority>
-            <description/>
-            <type>0</type>
-            <manual_close>1</manual_close>
-            <dependencies/>
-            <tags/>
+            <priority>AVERAGE</priority>
+            <manual_close>YES</manual_close>
         </trigger>
         <trigger>
             <expression>{Template App Pacemaker:pacemaker.nodes.offline.last()}&gt;0 and {Template App Pacemaker:pacemaker.cluster.maintenance.str(true)}=0</expression>
-            <recovery_mode>0</recovery_mode>
-            <recovery_expression/>
             <name>{HOST.NAME}/pacemaker: One or more nodes goes offline</name>
-            <correlation_mode>0</correlation_mode>
-            <correlation_tag/>
-            <url/>
-            <status>0</status>
-            <priority>4</priority>
-            <description/>
-            <type>0</type>
-            <manual_close>1</manual_close>
-            <dependencies/>
-            <tags/>
+            <priority>HIGH</priority>
+            <manual_close>YES</manual_close>
         </trigger>
         <trigger>
             <expression>{Template App Pacemaker:pacemaker.resources.failed.last()}&gt;0 and {Template App Pacemaker:pacemaker.cluster.maintenance.str(true)}=0</expression>
-            <recovery_mode>0</recovery_mode>
-            <recovery_expression/>
             <name>{HOST.NAME}/pacemaker: One or more resources have passed into &quot;failed&quot; state</name>
-            <correlation_mode>0</correlation_mode>
-            <correlation_tag/>
-            <url/>
-            <status>0</status>
-            <priority>3</priority>
-            <description/>
-            <type>0</type>
-            <manual_close>1</manual_close>
-            <dependencies/>
-            <tags/>
-        </trigger>
-        <trigger>
-            <expression>{Template App Pacemaker:proc.num[pacemakerd].max(30)}=0</expression>
-            <recovery_mode>0</recovery_mode>
-            <recovery_expression/>
-            <name>{HOST.NAME}/pacemaker: pacemakerd daemon isn't running</name>
-            <correlation_mode>0</correlation_mode>
-            <correlation_tag/>
-            <url/>
-            <status>0</status>
-            <priority>4</priority>
-            <description/>
-            <type>0</type>
-            <manual_close>1</manual_close>
-            <dependencies/>
-            <tags/>
-        </trigger>
-        <trigger>
-            <expression>{Template App Pacemaker:system.hostname.diff(0)}=1</expression>
-            <recovery_mode>2</recovery_mode>
-            <recovery_expression/>
-            <name>{HOST.NAME}/pacemaker: Probably cluster migration detected (hostname was changed)</name>
-            <correlation_mode>0</correlation_mode>
-            <correlation_tag/>
-            <url/>
-            <status>0</status>
-            <priority>2</priority>
-            <description/>
-            <type>0</type>
-            <manual_close>1</manual_close>
-            <dependencies/>
-            <tags/>
+            <priority>AVERAGE</priority>
+            <manual_close>YES</manual_close>
         </trigger>
     </triggers>
     <value_maps>
